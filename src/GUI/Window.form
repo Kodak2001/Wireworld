@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.Window">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <toolbar id="70871" binding="menuToolBar">
+        <constraints border-constraint="West"/>
+        <properties>
+          <orientation value="1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="27883" class="javax.swing.JButton" binding="openButton">
+            <constraints/>
+            <properties>
+              <text value="Open"/>
+            </properties>
+          </component>
+          <component id="54538" class="javax.swing.JLabel" binding="iterationPanel">
+            <constraints/>
+            <properties>
+              <labelFor value="78d27"/>
+              <text value="Liczba iteracji:"/>
+            </properties>
+          </component>
+          <component id="78d27" class="javax.swing.JTextField" binding="iterationTextField">
+            <constraints/>
+            <properties>
+              <editable value="true"/>
+              <enabled value="true"/>
+              <horizontalAlignment value="11"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="6d2f6" class="javax.swing.JButton" binding="STARTButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="START"/>
+            </properties>
+          </component>
+          <component id="c3d0e" class="javax.swing.JButton" binding="stopButton">
+            <constraints/>
+            <properties>
+              <horizontalTextPosition value="4"/>
+              <text value="STOP"/>
+            </properties>
+          </component>
+        </children>
+      </toolbar>
+      <component id="b90d6" class="javax.swing.JLabel" binding="programLabel">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
