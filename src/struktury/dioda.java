@@ -19,7 +19,7 @@ public class dioda {
 
     }
 
-    public int[][] diodaGeneration(){
+    public int[][] diodeGeneration(){
         if(whichWay.equals("leftToRight")){
             for(int i = 0; i < 2; i++){
                 board[startX][startY+i] = 3;

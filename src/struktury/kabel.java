@@ -21,9 +21,6 @@ public class kabel {
         for(int i = 0; i < 4; i++){
             board[startX][startY+i] = 3;
         }
-        for(int i = 0; i < 10; i++){
-            System.out.println(Arrays.toString(board[i]));
-        }
         return board;
     }
 }
