@@ -7,7 +7,10 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+
 import odczytIZapis.*;
+import przebiegGry.cykl;
 
 public class WireworldWindow extends JFrame {
     private JPanel menuPanel;
@@ -26,12 +29,10 @@ public class WireworldWindow extends JFrame {
     private final int cellPanelSizeX = 3600;
 
 
-    public WireworldWindow(String title, int x){
+    public WireworldWindow(String title, int x, int[][] tab){
         super(title);
 
         WireworldWindow.wireworldWindow = this;
-
-        FileReader file;
 
         int cellSize = 10;
         int cellHeight = x;
@@ -70,9 +71,8 @@ public class WireworldWindow extends JFrame {
 
 
 
-
+        cellGridPanel.setBackground(Color.orange);
         CellButton = new JButton[cellHeight + 2][cellWidth + 2];
-
         cellGridPanel.setLayout(new GridLayout(cellWidth + 2, cellHeight + 2));
         for(int i = 0; i < cellHeight + 2; i++){
             for(int j = 0; j < cellWidth + 2; j++){
@@ -80,8 +80,34 @@ public class WireworldWindow extends JFrame {
                 cellGridPanel.add(CellButton[i][j]);
                 CellButton[i][j].setPreferredSize(new Dimension(12,12));
                 CellButton[i][j].setBackground(Color.BLACK);
+                    }
+                }
+/* Początkowy układ planszy*/
+        int v = 0;
+        for (int i = 1; i < cellHeight; i++) {
+            for (int j = 1; j < cellWidth; j++) {
+                v = tab[i][j];
+
+                switch (v) {
+                    case (1):
+                        CellButton[i][j].setBackground(Color.YELLOW);
+                        break;
+                    case (2):
+                        CellButton[i][j].setBackground(Color.BLUE);
+                        break;
+                    case (3):
+                        CellButton[i][j].setBackground(Color.RED);
+                        break;
+                    case (0):
+                        CellButton[i][j].setBackground(Color.BLACK);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
+
         for (int i = 0; i < cellHeight + 2; i++) {
 
             CellButton[0][i].setVisible(false);
@@ -90,7 +116,6 @@ public class WireworldWindow extends JFrame {
         for (int i = 0; i < cellWidth + 2; i++) {
             CellButton[i][0].setVisible(false);
             CellButton[i][cellWidth + 1].setVisible(false);
-
         }
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,18 +147,26 @@ public class WireworldWindow extends JFrame {
             }
         });
 
-
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == startButton) {
+                    worker = new Worker();
+                    worker.execute();
+                }
+            }
+        });
     }
 
     public void updateCellGridPanel() {
         int[][] tab = new int[20][20];
         odczyt od = new odczyt("C:\\Users\\Kuba\\IdeaProjects\\Wireworld\\src\\com\\company\\elo.txt", 20, 20);
         tab = od.dataFromFile();
+        cykl gra = new cykl(tab);
         int v = 0;
         for (int i = 1; i < 20 + 1; i++) {
             for (int j = 1; j < 20 + 1; j++) {
                 v = tab[i][j];
-
 
                 switch (v) {
                     case (1):
@@ -155,26 +188,30 @@ public class WireworldWindow extends JFrame {
         }
     }
 
-    public void setColor(int x, int y, int v) {
-        switch (v) {
-            case 0:
-                CellButton[y][x].setBackground(Color.black);
-                break;
-            case 1:
-                CellButton[y][x].setBackground(Color.yellow);
-                break;
-            case 2:
-                CellButton[y][x].setBackground(Color.blue);
-                break;
-            case 3:
-                CellButton[y][x].setBackground(Color.red);
-                break;
+
+    private Worker worker;
+
+    class Worker extends SwingWorker<Void, Void> {
+        @Override
+        protected Void doInBackground() throws Exception {
+ {
+                int x =20;
+                int[][] tab = new int[x][x];
+                odczyt od = new odczyt("C:\\Users\\Kuba\\IdeaProjects\\Wireworld\\src\\com\\company\\elo.txt", x, x);
+                tab = od.dataFromFile();
+                cykl gra = new cykl(tab);
+                new WireworldWindow("ello", x, tab);
+                for (int j = 0; j < 10; j++) {
+                    tab = gra.stateChange(tab);
+                    wireworldWindow.updateCellGridPanel();
+                    System.out.println("jd");
+                }
+
+            }
+
+                Thread.sleep(100);
+
+            return null;
         }
     }
-
-    public void generalUpdate(){
-        if(true)
-        wireworldWindow.updateCellGridPanel();
-    }
-
 }

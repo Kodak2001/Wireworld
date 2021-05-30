@@ -16,6 +16,7 @@ public class Main {
         odczyt od = new odczyt("C:\\Users\\Kuba\\IdeaProjects\\Wireworld\\src\\com\\company\\elo.txt", x, x);
         tab = od.dataFromFile();
         cykl gra = new cykl(tab);
+        new WireworldWindow("ello", x, tab);
         for (int j = 0; j < 10; j++) {
             System.out.println(" ");
             for (int i = 0; i < x; i++) {
@@ -23,6 +24,6 @@ public class Main {
             }
             tab = gra.stateChange(tab);
         }
-        new WireworldWindow("ello", x);
+
     }
 }
