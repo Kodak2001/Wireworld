@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class WireworldWindow extends JFrame {
     private JButton stopButton;
     private JPanel cellPanel;
     private JPanel cellGridPanel;
+    public static File file;
 
     public static WireworldWindow wireworldWindow;
 
@@ -67,7 +69,9 @@ public class WireworldWindow extends JFrame {
         iterationTextField.setText("10");
         iterationTextField.setHorizontalAlignment(SwingConstants.RIGHT);
 
+        Action action = new Action();
         menuPanel.add(startButton);
+        startButton.addActionListener(action);
 
 
 
@@ -132,40 +136,31 @@ public class WireworldWindow extends JFrame {
                 if(e.getSource() == openButton) {
                     JFileChooser fileChooser = new JFileChooser();
                     int response = fileChooser.showOpenDialog(null);
-                    // fileChooser.setCurrentDirectory(new File("."));
+                     fileChooser.setCurrentDirectory(new File("."));
 
                     if(response == JFileChooser.APPROVE_OPTION) {
-                        try {
-                            FileReader file = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
-                        } catch (FileNotFoundException fileNotFoundException) {
-                            fileNotFoundException.printStackTrace();
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
+                        file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        updateCellGridPanel();
                     }
-                }
-            }
-        });
-
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource() == startButton) {
-                    worker = new Worker();
-                    worker.execute();
                 }
             }
         });
     }
 
+    public static class getFilePath {
+        public String getFilePath() {
+            return file.getAbsolutePath();
+        }
+    }
+
     public void updateCellGridPanel() {
-        int[][] tab = new int[20][20];
-        odczyt od = new odczyt("C:\\Users\\Kuba\\IdeaProjects\\Wireworld\\src\\com\\company\\elo.txt", 20, 20);
+        int[][] tab = new int[22][22];
+        odczyt od = new odczyt(file.getAbsolutePath(), 22, 22);
         tab = od.dataFromFile();
         cykl gra = new cykl(tab);
         int v = 0;
-        for (int i = 1; i < 20 + 1; i++) {
-            for (int j = 1; j < 20 + 1; j++) {
+        for (int i = 1; i < 20 + 2; i++) {
+            for (int j = 1; j < 20 + 2; j++) {
                 v = tab[i][j];
 
                 switch (v) {
@@ -189,7 +184,21 @@ public class WireworldWindow extends JFrame {
     }
 
 
-    private Worker worker;
+    private class Action implements ActionListener{
+
+        private Worker worker;
+
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == startButton) {
+                worker = new Worker();
+                worker.execute();
+            }
+        }
+
+    }
+
+
+
 
     class Worker extends SwingWorker<Void, Void> {
         @Override
@@ -197,14 +206,14 @@ public class WireworldWindow extends JFrame {
  {
                 int x =20;
                 int[][] tab = new int[x][x];
-                odczyt od = new odczyt("C:\\Users\\Kuba\\IdeaProjects\\Wireworld\\src\\com\\company\\elo.txt", x, x);
+                odczyt od = new odczyt(file.getAbsolutePath(), x, x);
                 tab = od.dataFromFile();
                 cykl gra = new cykl(tab);
                 new WireworldWindow("ello", x, tab);
                 for (int j = 0; j < 10; j++) {
                     tab = gra.stateChange(tab);
                     wireworldWindow.updateCellGridPanel();
-                    System.out.println("jd");
+                    System.out.println("dzia ua");
                 }
 
             }
