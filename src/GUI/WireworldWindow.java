@@ -13,11 +13,15 @@ import java.util.Arrays;
 import odczytIZapis.*;
 import przebiegGry.cykl;
 
+import static GUI.WireworldWindow.wireworldWindow;
+
 public class WireworldWindow extends JFrame {
     private JPanel menuPanel;
     private JButton openButton;
     private JLabel iterationLabel;
     private JTextField iterationTextField;
+    private JLabel boardSizeLabel;
+    private JTextField boardSize;
     private JButton startButton;
     private JButton stopButton;
     private JPanel cellPanel;
@@ -27,16 +31,16 @@ public class WireworldWindow extends JFrame {
     public static WireworldWindow wireworldWindow;
 
     public final JButton CellButton[][];
-    private final int cellPanelSizeY = 3600;
-    private final int cellPanelSizeX = 3600;
+    int ile;
 
 
     public WireworldWindow(String title, int x, int[][] tab){
         super(title);
 
-        WireworldWindow.wireworldWindow = this;
+        wireworldWindow = this;
 
-        int cellSize = 10;
+
+
         int cellHeight = x;
         int cellWidth = x;
 
@@ -46,6 +50,8 @@ public class WireworldWindow extends JFrame {
         openButton = new JButton("Open");
         iterationLabel = new JLabel("Wpisz liczbę iteracji");
         iterationTextField = new JTextField();
+        boardSizeLabel = new JLabel("Wpisz rozmiar planszy");
+        boardSize = new JTextField();
         startButton = new JButton("Start");
 
         menuPanel.setPreferredSize(new Dimension(150, 600));
@@ -63,11 +69,21 @@ public class WireworldWindow extends JFrame {
 
         iterationLabel.setForeground(Color.yellow);
 
+
         menuPanel.add(iterationLabel);
         menuPanel.add(iterationTextField);
         iterationTextField.setPreferredSize(new Dimension(150, 20));
         iterationTextField.setText("10");
         iterationTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        menuPanel.add(boardSizeLabel);
+        menuPanel.add(boardSize);
+        boardSizeLabel.setForeground(Color.yellow);
+        boardSize.setPreferredSize(new Dimension(150, 20));
+        boardSize.setText("20");
+        boardSize.setHorizontalAlignment(SwingConstants.RIGHT);
+
+
 
         Action action = new Action();
         menuPanel.add(startButton);
@@ -190,12 +206,14 @@ public class WireworldWindow extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == startButton) {
+
+                ile = Integer.parseInt(iterationTextField.getText());
+
                 worker = new Worker();
                 worker.execute();
+                }
             }
         }
-
-    }
 
 
 
@@ -203,22 +221,17 @@ public class WireworldWindow extends JFrame {
     class Worker extends SwingWorker<Void, Void> {
         @Override
         protected Void doInBackground() throws Exception {
- {
+
                 int x =20;
                 int[][] tab = new int[x][x];
-                odczyt od = new odczyt(file.getAbsolutePath(), x, x);
+                odczyt od = new odczyt(WireworldWindow.file.getAbsolutePath(), x, x);
                 tab = od.dataFromFile();
                 cykl gra = new cykl(tab);
-                new WireworldWindow("ello", x, tab);
-                for (int j = 0; j < 10; j++) {
+                while(ile-- > 0) {
                     tab = gra.stateChange(tab);
                     wireworldWindow.updateCellGridPanel();
-                    System.out.println("dzia ua");
+                    Thread.sleep(2000);
                 }
-
-            }
-
-                Thread.sleep(100);
 
             return null;
         }
