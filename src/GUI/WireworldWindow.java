@@ -5,18 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.TimerTask;
 import java.util.Timer;
-import java.util.TimerTask;
+
 
 import odczytIZapis.*;
 import przebiegGry.cykl;
-
-import static GUI.WireworldWindow.wireworldWindow;
 
 public class WireworldWindow extends JFrame {
     private JPanel menuPanel;
@@ -105,31 +100,6 @@ public class WireworldWindow extends JFrame {
                 CellButton[i][j].setBackground(Color.BLACK);
             }
         }
-        /* Początkowy układ planszy*/
-        int v = 0;
-        for (int i = 1; i < cellHeight; i++) {
-            for (int j = 1; j < cellWidth; j++) {
-                v = tab[i][j];
-
-                switch (v) {
-                    case (1):
-                        CellButton[i][j].setBackground(Color.YELLOW);
-                        break;
-                    case (2):
-                        CellButton[i][j].setBackground(Color.BLUE);
-                        break;
-                    case (3):
-                        CellButton[i][j].setBackground(Color.RED);
-                        break;
-                    case (0):
-                        CellButton[i][j].setBackground(Color.BLACK);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
 
         for (int i = 0; i < cellHeight + 2; i++) {
 
@@ -159,7 +129,6 @@ public class WireworldWindow extends JFrame {
 
                     if(response == JFileChooser.APPROVE_OPTION) {
                         file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                    //    updateCellGridPanel();
                     }
                 }
             }
