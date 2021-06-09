@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.TimerTask;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import odczytIZapis.*;
 import przebiegGry.cykl;
@@ -100,9 +103,9 @@ public class WireworldWindow extends JFrame {
                 cellGridPanel.add(CellButton[i][j]);
                 CellButton[i][j].setPreferredSize(new Dimension(12,12));
                 CellButton[i][j].setBackground(Color.BLACK);
-                    }
-                }
-/* Początkowy układ planszy*/
+            }
+        }
+        /* Początkowy układ planszy*/
         int v = 0;
         for (int i = 1; i < cellHeight; i++) {
             for (int j = 1; j < cellWidth; j++) {
@@ -152,11 +155,11 @@ public class WireworldWindow extends JFrame {
                 if(e.getSource() == openButton) {
                     JFileChooser fileChooser = new JFileChooser();
                     int response = fileChooser.showOpenDialog(null);
-                     fileChooser.setCurrentDirectory(new File("."));
+                    fileChooser.setCurrentDirectory(new File("."));
 
                     if(response == JFileChooser.APPROVE_OPTION) {
                         file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                        updateCellGridPanel();
+                    //    updateCellGridPanel();
                     }
                 }
             }
@@ -169,30 +172,28 @@ public class WireworldWindow extends JFrame {
         }
     }
 
-    public void updateCellGridPanel() {
-        int[][] tab = new int[22][22];
-        odczyt od = new odczyt(file.getAbsolutePath(), 22, 22);
-        tab = od.dataFromFile();
-        cykl gra = new cykl(tab);
+    public void updateCellGridPanel(int tab[][]) {
+
         int v = 0;
         for (int i = 1; i < 20 + 2; i++) {
             for (int j = 1; j < 20 + 2; j++) {
                 v = tab[i][j];
 
                 switch (v) {
-                    case (1):
+                    case (3):
                         CellButton[i][j].setBackground(Color.YELLOW);
                         break;
                     case (2):
                         CellButton[i][j].setBackground(Color.BLUE);
                         break;
-                    case (3):
+                    case (1):
                         CellButton[i][j].setBackground(Color.RED);
                         break;
                     case (0):
                         CellButton[i][j].setBackground(Color.BLACK);
                         break;
                     default:
+                        System.out.print("lol");
                         break;
                 }
             }
@@ -211,28 +212,37 @@ public class WireworldWindow extends JFrame {
 
                 worker = new Worker();
                 worker.execute();
-                }
             }
         }
+    }
 
 
 
 
     class Worker extends SwingWorker<Void, Void> {
+        int x = 22;
+        private int[][] tab = new int[x][x];
         @Override
         protected Void doInBackground() throws Exception {
 
-                int x =20;
-                int[][] tab = new int[x][x];
-                odczyt od = new odczyt(WireworldWindow.file.getAbsolutePath(), x, x);
-                tab = od.dataFromFile();
-                cykl gra = new cykl(tab);
-                while(ile-- > 0) {
-                    tab = gra.stateChange(tab);
-                    wireworldWindow.updateCellGridPanel();
-                    Thread.sleep(1000);
+
+
+            odczyt od = new odczyt(WireworldWindow.file.getAbsolutePath(), x, x);
+            tab = od.dataFromFile();
+            cykl gra = new cykl(tab);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    wireworldWindow.updateCellGridPanel(tab);
+                     tab = gra.stateChange(tab);
+                    System.out.print(ile);
+                    ile--;
                 }
-                System.out.print("koniec");
+            }, 0,100);
+
+
+            System.out.print("koniec");
             return null;
         }
     }
