@@ -230,9 +230,9 @@ public class WireworldWindow extends JFrame {
                 while(ile-- > 0) {
                     tab = gra.stateChange(tab);
                     wireworldWindow.updateCellGridPanel();
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 }
-
+                System.out.print("koniec");
             return null;
         }
     }
