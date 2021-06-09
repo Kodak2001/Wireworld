@@ -166,11 +166,7 @@ public class WireworldWindow extends JFrame {
         });
     }
 
-    public static class getFilePath {
-        public String getFilePath() {
-            return file.getAbsolutePath();
-        }
-    }
+
 
     public void updateCellGridPanel(int tab[][]) {
 
@@ -235,14 +231,18 @@ public class WireworldWindow extends JFrame {
                 @Override
                 public void run() {
                     wireworldWindow.updateCellGridPanel(tab);
-                     tab = gra.stateChange(tab);
-                    System.out.print(ile);
-                    ile--;
+                    for (int j = 0; j < ile; j++) {
+                        System.out.println(" ");
+                        for (int i = 1; i < 22; i++) {
+                            System.out.println(Arrays.toString(tab[i]));
+                        }
+                        tab = gra.stateChange(tab);
+                    }
+
                 }
-            }, 0,100);
+            }, 1000,100);
 
 
-            System.out.print("koniec");
             return null;
         }
     }
