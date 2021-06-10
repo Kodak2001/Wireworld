@@ -11,9 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-        int x =20;
-        int[][] tab = new int[x][x];
-        new WireworldWindow("Wireworld", x);
+        new WireworldWindow("Wireworld");
     }
 }
