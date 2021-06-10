@@ -158,7 +158,6 @@ public class WireworldWindow extends JFrame {
                         CellButton[i][j].setBackground(Color.BLACK);
                         break;
                     default:
-                        System.out.print("lol");
                         break;
                 }
             }
@@ -188,7 +187,7 @@ public class WireworldWindow extends JFrame {
         int x = 22;
         private int[][] tab = new int[x][x];
         @Override
-        protected Void doInBackground() throws Exception {
+        protected Void doInBackground() {
 
 
 
@@ -196,6 +195,8 @@ public class WireworldWindow extends JFrame {
             tab = od.dataFromFile();
             cykl gra = new cykl(tab);
             Timer timer = new Timer();
+            Timer timer2 = new Timer();
+
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -206,10 +207,15 @@ public class WireworldWindow extends JFrame {
                             System.out.println(Arrays.toString(tab[i]));
                         }
                         tab = gra.stateChange(tab);
+
+                        timer2.schedule(new TimerTask() {
+                            @Override
+                            public void run() {  }
+                        }, 1000,1000);
                     }
 
                 }
-            }, 1000,100);
+            }, 1000,1000);
 
 
             return null;
