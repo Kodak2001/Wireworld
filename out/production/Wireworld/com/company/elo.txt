@@ -1,0 +1,2 @@
+XOR 10 15 re
+CONDUCTOR 5 5
