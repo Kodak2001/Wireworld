@@ -21,7 +21,6 @@ public class WireworldWindow extends JFrame {
     private JLabel boardSizeLabel;
     private JTextField boardSize;
     private JButton startButton;
-    private JButton stopButton;
     private JPanel cellPanel;
     private JPanel cellGridPanel;
     public static File file;
@@ -33,14 +32,12 @@ public class WireworldWindow extends JFrame {
     int map;
 
 
-    public WireworldWindow(String title, int x) {
+    public WireworldWindow(String title){
         super(title);
 
         wireworldWindow = this;
 
 
-        int cellHeight = x;
-        int cellWidth = x;
 
         menuPanel = new JPanel();
         cellPanel = new JPanel();
@@ -48,7 +45,7 @@ public class WireworldWindow extends JFrame {
         openButton = new JButton("Open");
         iterationLabel = new JLabel("Wpisz liczbę iteracji");
         iterationTextField = new JTextField();
-        boardSizeLabel = new JLabel("Wpisz rozmiar planszy");
+        boardSizeLabel = new JLabel("Rozmiar planszy z pliku");
         boardSize = new JTextField();
         startButton = new JButton("Start");
 
@@ -82,31 +79,33 @@ public class WireworldWindow extends JFrame {
         boardSize.setHorizontalAlignment(SwingConstants.RIGHT);
 
 
+
         Action action = new Action();
         menuPanel.add(startButton);
         startButton.addActionListener(action);
 
 
+
         cellGridPanel.setBackground(Color.orange);
-        CellButton = new JButton[cellHeight + 2][cellWidth + 2];
-        cellGridPanel.setLayout(new GridLayout(cellWidth + 2, cellHeight + 2));
-        for (int i = 0; i < cellHeight + 2; i++) {
-            for (int j = 0; j < cellWidth + 2; j++) {
+        CellButton = new JButton[45][45];
+        cellGridPanel.setLayout(new GridLayout(45, 45));
+        for(int i = 0; i < 45; i++){
+            for(int j = 0; j < 45; j++){
                 CellButton[i][j] = new JButton("");
                 cellGridPanel.add(CellButton[i][j]);
-                CellButton[i][j].setPreferredSize(new Dimension(12, 12));
+                CellButton[i][j].setPreferredSize(new Dimension(12,12));
                 CellButton[i][j].setBackground(Color.BLACK);
             }
         }
 
-        for (int i = 0; i < cellHeight + 2; i++) {
+        for (int i = 0; i < 45; i++) {
 
             CellButton[0][i].setVisible(false);
-            CellButton[cellHeight + 1][i].setVisible(false);
+            CellButton[44][i].setVisible(false);
         }
-        for (int i = 0; i < cellWidth + 2; i++) {
+        for (int i = 0; i < 45; i++) {
             CellButton[i][0].setVisible(false);
-            CellButton[i][cellWidth + 1].setVisible(false);
+            CellButton[i][44].setVisible(false);
         }
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,15 +115,16 @@ public class WireworldWindow extends JFrame {
         this.setLayout(null);
 
 
+
         openButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == openButton) {
+                if(e.getSource() == openButton) {
                     JFileChooser fileChooser = new JFileChooser();
                     int response = fileChooser.showOpenDialog(null);
                     fileChooser.setCurrentDirectory(new File("."));
 
-                    if (response == JFileChooser.APPROVE_OPTION) {
+                    if(response == JFileChooser.APPROVE_OPTION) {
                         file = new File(fileChooser.getSelectedFile().getAbsolutePath());
                         map = Integer.parseInt(boardSize.getText());
 
@@ -133,6 +133,7 @@ public class WireworldWindow extends JFrame {
             }
         });
     }
+
 
 
     public void updateCellGridPanel(int tab[][]) {
@@ -163,12 +164,12 @@ public class WireworldWindow extends JFrame {
     }
 
 
-    private class Action implements ActionListener {
+    private class Action implements ActionListener{
 
         private Worker worker;
 
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == startButton) {
+            if(e.getSource() == startButton) {
 
                 ile = Integer.parseInt(iterationTextField.getText());
 
@@ -179,10 +180,11 @@ public class WireworldWindow extends JFrame {
     }
 
 
-    class Worker extends SwingWorker<Void, Void> {
-        int x = 22;
-        private int[][] tab = new int[x][x];
 
+
+    class Worker extends SwingWorker<Void, Void> {
+        int x = map + 2;
+        private int[][] tab = new int[x][x];
         @Override
         protected Void doInBackground() {
 
@@ -192,13 +194,12 @@ public class WireworldWindow extends JFrame {
             wireworldWindow.updateCellGridPanel(tab);
             cykl gra = new cykl(tab);
             Timer timer = new Timer();
-            Timer timer2 = new Timer();
 
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     for (int j = 0; j < ile; j++) {
-                        for (int i = 1; i < 22; i++) {
+                        for (int i = 1; i < map + 2; i++) {
                         }
                         tab = gra.stateChange(tab);
                         wireworldWindow.updateCellGridPanel(tab);
