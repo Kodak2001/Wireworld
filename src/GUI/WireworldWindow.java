@@ -30,9 +30,10 @@ public class WireworldWindow extends JFrame {
 
     public final JButton CellButton[][];
     int ile;
+    int map;
 
 
-    public WireworldWindow(String title, int x, int[][] tab){
+    public WireworldWindow(String title, int x){
         super(title);
 
         wireworldWindow = this;
@@ -129,6 +130,8 @@ public class WireworldWindow extends JFrame {
 
                     if(response == JFileChooser.APPROVE_OPTION) {
                         file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        map = Integer.parseInt(boardSize.getText());
+
                     }
                 }
             }
@@ -140,8 +143,8 @@ public class WireworldWindow extends JFrame {
     public void updateCellGridPanel(int tab[][]) {
 
         int v = 0;
-        for (int i = 1; i < 20 + 2; i++) {
-            for (int j = 1; j < 20 + 2; j++) {
+        for (int i = 1; i < map + 2; i++) {
+            for (int j = 1; j < map + 2; j++) {
                 v = tab[i][j];
 
                 switch (v) {
@@ -184,7 +187,7 @@ public class WireworldWindow extends JFrame {
 
 
     class Worker extends SwingWorker<Void, Void> {
-        int x = 22;
+        int x = map + 2;
         private int[][] tab = new int[x][x];
         @Override
         protected Void doInBackground() {
@@ -203,7 +206,7 @@ public class WireworldWindow extends JFrame {
                     wireworldWindow.updateCellGridPanel(tab);
                     for (int j = 0; j < ile; j++) {
                         System.out.println(" ");
-                        for (int i = 1; i < 22; i++) {
+                        for (int i = 1; i < map + 2; i++) {
                             System.out.println(Arrays.toString(tab[i]));
                         }
                         tab = gra.stateChange(tab);
